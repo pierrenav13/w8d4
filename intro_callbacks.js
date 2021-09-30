@@ -71,61 +71,98 @@
 
 // addNumbers(0, 3, sum => console.log(`Total Sum: ${sum}`));
 
-const readline = require("readline")
+// const readline = require("readline")
 
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+// const rl = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout
+// });
 
-function askIfGreaterThan(el1, el2, callback){
-    rl.question(`Is ${el1} > ${el2}: `, answer => {
-        if (answer === 'yes'){
-            callback(true);
-        }
-        else {
-            callback(false);
-        }
-    })
-} 
+// function askIfGreaterThan(el1, el2, callback){
+//     rl.question(`Is ${el1} > ${el2}: `, function(answer) {
+//         if (answer === 'yes'){
+//             callback(true);
+//         }
+//         else {
+//             callback(false);
+//         }
+//     })
+// } 
 
-function innerBubbleSortLoop(arr, i, madeAnySwaps, outerBubbleSortLoop){
-    if (i < arr.length - 1){
-        askIfGreaterThan(arr[i], arr[i+1], function(isGreaterThan){
-            if (isGreaterThan){
-                arr[i], arr[i + 1] = arr[i + 1], arr[i];
-                madeAnySwaps = true;
-            }
-            else {
-                madeAnySwaps = false;
-            }
-            innerBubbleSortLoop(arr, i + 1, madeAnySwaps, outerBubbleSortLoop);
-        })
-    }
-    else if (i === arr.length - 1){
-        outerBubbleSortLoop(madeAnySwaps);
-        return ;
-    }
-}
+// function innerBubbleSortLoop(arr, i, madeAnySwaps, outerBubbleSortLoop){
+//     if (i < arr.length - 1){
+//         askIfGreaterThan(arr[i], arr[i+1], function(isGreaterThan){
+//             if (isGreaterThan){
+//                 let temp = arr[i];
+//                 arr[i] = arr[i + 1];
+//                 arr[i + 1] = temp; 
+//                 madeAnySwaps = true;
+//             }
+//             innerBubbleSortLoop(arr, i + 1, madeAnySwaps, outerBubbleSortLoop);
+//         })
+//     }
+//     else if (i === arr.length - 1){
+//         outerBubbleSortLoop(madeAnySwaps);
+//     }
+// }
 
-function absurdBubbleSort(arr, sortCompletionCallback){
-    function outerBubbleSortLoop(madeAnySwaps){
-        if (madeAnySwaps){
-            innerBubbleSortLoop(arr, 0, false, outerBubbleSortLoop);
-        }
-        else{
-            sortCompletionCallback(arr);
-        }
+// function absurdBubbleSort(arr, sortCompletionCallback){
+//     function outerBubbleSortLoop(madeAnySwaps){
+//         if (madeAnySwaps){
+//             innerBubbleSortLoop(arr, 0, false, outerBubbleSortLoop);
+//         }
+//         else{
+//             sortCompletionCallback(arr);
+//         }
         
+//     }
+//     outerBubbleSortLoop(true);
+// }
+
+// absurdBubbleSort([3, 4, 2], function (arr) {
+//     console.log("Sorted array: " + JSON.stringify(arr));
+//     rl.close();
+// });
+
+
+// Function.prototype.myBind = function(context) {
+//     return () => {
+//         this.apply(context)
+//     }
+// }
+
+// class Lamp {
+//     constructor() {
+//         this.name = "a lamp";
+//     }
+// }
+
+// const turnOn = function () {
+//     console.log("Turning on " + this.name);
+// };
+
+// const lamp = new Lamp();
+
+// turnOn(); // should not work the way we want it to
+
+// const boundTurnOn = turnOn.bind(lamp);
+// const myBoundTurnOn = turnOn.myBind(lamp);
+
+// boundTurnOn(); // should say "Turning on a lamp"
+// myBoundTurnOn(); // should say "Turning on a lamp"
+
+Function.prototype.myThrottle = function(interval){
+    let tooSoon = false;
+    //debugger
+    let method = this;
+    return function (...args) {
+        if (!tooSoon) {
+            tooSoon = true;
+            setTimeout(() => {
+                tooSoon = false
+            }, interval);
+            method();
+        }
     }
-    outerBubbleSortLoop(true);
 }
 
-absurdBubbleSort([1, 4, 2], function (arr) {
-    console.log("Sorted array: " + JSON.stringify(arr));
-    rl.close();
-});
-
-// innerBubbleSortLoop([2,1,3], 0, false, function(madeAnySwaps){
-//     console.log('in outer bubble sort')
-// })
