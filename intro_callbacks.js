@@ -45,6 +45,32 @@
 
 // const clock = new Clock();
 
+// const readline = require("readline")
+
+// const rl = readline.createInterface({
+//     input: process.stdin,
+//     output: process.stdout
+// });
+
+// function addNumbers(sum, numsLeft, completionCallback) {
+//     if (numsLeft > 0) {
+//         rl.question("Enter a number: ", function(answer) {
+//             let num = parseInt(answer);
+//             sum += num;
+//             console.log(sum);
+//             addNumbers(sum, numsLeft - 1, completionCallback);
+//         });
+        
+//     }
+//     else {
+//         completionCallback(sum);
+//         rl.close();
+
+//     }
+// }
+
+// addNumbers(0, 3, sum => console.log(`Total Sum: ${sum}`));
+
 const readline = require("readline")
 
 const rl = readline.createInterface({
@@ -52,21 +78,54 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-function addNumbers(sum, numsLeft, completionCallback) {
-    if (numsLeft > 0) {
-        rl.question("Enter a number: ", function(answer) {
-            let num = parseInt(answer);
-            sum += num;
-            console.log(sum);
-            addNumbers(sum, numsLeft - 1, completionCallback);
-        });
-        
-    }
-    else {
-        completionCallback(sum);
-        rl.close();
+function askIfGreaterThan(el1, el2, callback){
+    rl.question(`Is ${el1} > ${el2}: `, answer => {
+        if (answer === 'yes'){
+            callback(true);
+        }
+        else {
+            callback(false);
+        }
+    })
+} 
 
+function innerBubbleSortLoop(arr, i, madeAnySwaps, outerBubbleSortLoop){
+    if (i < arr.length - 1){
+        askIfGreaterThan(arr[i], arr[i+1], function(isGreaterThan){
+            if (isGreaterThan){
+                arr[i], arr[i + 1] = arr[i + 1], arr[i];
+                madeAnySwaps = true;
+            }
+            else {
+                madeAnySwaps = false;
+            }
+            innerBubbleSortLoop(arr, i + 1, madeAnySwaps, outerBubbleSortLoop);
+        })
+    }
+    else if (i === arr.length - 1){
+        outerBubbleSortLoop(madeAnySwaps);
+        return ;
     }
 }
 
-addNumbers(0, 3, sum => console.log(`Total Sum: ${sum}`));
+function absurdBubbleSort(arr, sortCompletionCallback){
+    function outerBubbleSortLoop(madeAnySwaps){
+        if (madeAnySwaps){
+            innerBubbleSortLoop(arr, 0, false, outerBubbleSortLoop);
+        }
+        else{
+            sortCompletionCallback(arr);
+        }
+        
+    }
+    outerBubbleSortLoop(true);
+}
+
+absurdBubbleSort([1, 4, 2], function (arr) {
+    console.log("Sorted array: " + JSON.stringify(arr));
+    rl.close();
+});
+
+// innerBubbleSortLoop([2,1,3], 0, false, function(madeAnySwaps){
+//     console.log('in outer bubble sort')
+// })
